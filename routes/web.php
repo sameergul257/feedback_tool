@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FeedbackController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,9 +15,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::prefix('/feedback')->name('feedback.')->middleware('auth')->controller(FeedbackController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/create', 'create')->name('create');
+    Route::post('/create', 'store')->name('store');
+    Route::get('/view/{id}', 'view')->name('view');
+    Route::post('/vote', 'vote')->name('vote');
+    Route::post('/addcomment', 'add_comment')->name('add_comment');
+});
