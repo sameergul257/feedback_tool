@@ -50,7 +50,7 @@ class FeedbackController extends Controller
     public function view($id)
     {
         $feedback = Feedback::findOrFail($id);
-        $voted = FeedbackVote::where('feedback_id', $id)->value('id');
+        $voted = FeedbackVote::where('feedback_id', $id)->where('user_id', auth()->user()->id)->value('id');
         return view('feedback.view', compact('feedback', 'voted'));
     }
 
@@ -58,14 +58,14 @@ class FeedbackController extends Controller
     {
         try {
             $feedback = Feedback::findOrFail($request->id);
-            if (!$feedback->user->hasUpvoted($feedback)) {
+            if (!$feedback->hasUserVoted(auth()->user())) {
                 FeedbackVote::create([
                     'user_id' => auth()->user()->id,
                     'feedback_id' => $feedback->id,
                 ]);
                 return redirect()->route('feedback.view', ['id' => $request->id])->with('status', 'Voted successfully');
             } else {
-                $feedback = FeedbackVote::where('feedback_id', $request->id)->delete();
+                $feedback = FeedbackVote::where('feedback_id', $request->id)->where('user_id', auth()->user()->id)->delete();
                 return redirect()->route('feedback.view', ['id' => $request->id])->with('status', 'Vote removed successfully');
             }
         } catch (\Throwable $th) {
@@ -112,8 +112,6 @@ class FeedbackController extends Controller
         if (!$feedback) {
             return redirect()->back()->with('error', 'Feedback not found');
         }
-
-
         try {
             $feedback->votes()->delete();
             $feedback->comments()->delete();

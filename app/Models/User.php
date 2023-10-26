@@ -50,17 +50,12 @@ class User extends Authenticatable
 
     public function feedback()
     {
-        return $this->hasMany(Feedback::class);
+        return $this->hasMany(Feedback::class, 'submitted_by');
     }
 
-    public function upvotes()
+    public function votes()
     {
         return $this->hasMany(FeedbackVote::class);
-    }
-
-    public function hasUpvoted(Feedback $feedback)
-    {
-        return $this->upvotes()->where('feedback_id', $feedback->id)->exists();
     }
 
     public function comments()

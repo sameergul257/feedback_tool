@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,4 +32,9 @@ Route::prefix('/feedback')->name('feedback.')->middleware('auth')->controller(Fe
     Route::middleware('checkuserrole:admin')->group(function () {
         Route::delete('/delete/{id}', 'destroy')->name('destroy');
     });
+});
+
+Route::prefix('/user')->name('user.')->middleware(['auth', 'checkuserrole:admin'])->controller(UserController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::delete('/delete/{id}', 'destroy')->name('destroy');
 });

@@ -40,4 +40,9 @@ class Feedback extends Model
     {
         return $this->hasMany(FeedbackVote::class);
     }
+
+    public function hasUserVoted(User $user)
+    {
+        return $this->voters->contains($user);
+    }
 }

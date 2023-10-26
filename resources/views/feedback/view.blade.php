@@ -76,6 +76,8 @@
                             <div class="font-italic" style="color: red">{{ $message }}</div>
                         @enderror
                         <br>
+                        <div id="comment_action_status_div" class="alert alert-success" style="display: none"></div>
+                        <br>
                         <button class="btn btn-primary">Add</button>
                     </form>
                 </div>
@@ -103,9 +105,21 @@
                 data: data,
                 success: function (response, textStatus, xhr) {
                     get_comments_list();
-                    tinyMCE.get('myeditorinstance').setContent('')
+                    $("#comment_action_status_div").html('Comment added successfully');
+                    $("#comment_action_status_div").addClass('alert-success').removeClass('alert-danger');
+                    $("#comment_action_status_div").show();
+                    setTimeout(function() {
+                        $("#comment_action_status_div").hide();
+                    }, 4000);
+                    tinyMCE.get('myeditorinstance').setContent('');
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    $("#comment_action_status_div").html('Error adding comment');
+                    $("#comment_action_status_div").removeClass('alert-success').addClass('alert-danger');
+                    $("#comment_action_status_div").show();
+                    setTimeout(function() {
+                        $("#comment_action_status_div").hide();
+                    }, 4000);
                     var response = XMLHttpRequest;
                     console.error(response);
                 }
