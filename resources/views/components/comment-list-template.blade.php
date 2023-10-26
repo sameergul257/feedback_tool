@@ -12,7 +12,7 @@
                 {!! $comment->content !!}
             </div>
             <div class="card-footer text-muted">
-                {{ $comment->created_at }}
+                {{ $comment->created_at->format('M d Y h:i:s A') }}
             </div>
         </div>
         <br>

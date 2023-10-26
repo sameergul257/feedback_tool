@@ -18,8 +18,19 @@
     
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="d-flex justify-content-between">
+            <div class="d-flex flex-row">
                 <h3>View Feedback</h3>
+                <div style="margin-left: 20px">
+                    <form action="{{ route('feedback.vote') }}" method="post">
+                        @csrf
+                        <input type="hidden" name="id" value="{{ $feedback->id }}">
+                        @if (!$voted)
+                            <button class="btn btn-primary">Vote</button>
+                        @else
+                            <button class="btn btn-danger">Remove Vote</button>
+                        @endif
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -40,15 +51,8 @@
                             <div>{{ $feedback->user->name }}</div>
                         </div>
                         <div class="col-md-3 col-6">
-                            <form action="{{ route('feedback.vote') }}" method="post">
-                                @csrf
-                                <input type="hidden" name="id" value="{{ $feedback->id }}">
-                                @if (!$voted)
-                                    <button class="btn btn-primary">Vote</button>
-                                @else
-                                    <button class="btn btn-danger">Remove Vote</button>
-                                @endif
-                            </form>
+                            <label for=""><b>Last Updated</b></label>
+                            <div>{{ $feedback->updated_at->format('M d Y h:i:s A') }}</div>
                         </div>
                     </div>
                 </div>

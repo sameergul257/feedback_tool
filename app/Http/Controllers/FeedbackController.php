@@ -16,10 +16,14 @@ class FeedbackController extends Controller
         return view('feedback.index', compact('feedbacks'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
+        $feedback = null;
+        if (isset($request->id)) {
+            $feedback = Feedback::findOrFail($request->id);
+        }
         $feedback_categories = FeedbackCategory::get(['id', 'name']);
-        return view('feedback.create', compact('feedback_categories'));
+        return view('feedback.create', compact('feedback_categories', 'feedback'));
     }
 
     public function store(Request $request)
@@ -33,6 +37,9 @@ class FeedbackController extends Controller
         try {
             if (isset($request->id)) {
                 $feedback = Feedback::findOrFail($request->id);
+                if ($feedback->submitted_by != auth()->user()->id) {
+                    return redirect()->route('feedback.index')->with('error', 'Permission denied, Cannot edit this feedback');
+                }
             } else {
                 $feedback = new Feedback();
             }
