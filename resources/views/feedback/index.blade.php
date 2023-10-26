@@ -48,6 +48,14 @@
                                     <td>{{ $feedback->created_at }}</td>
                                     <td>
                                         <a href="{{ route('feedback.view', ['id' => $feedback->id]) }}" class="btn btn-sm btn-success">View</a>
+                                        @if ($userRole == 'admin')
+                                            <form method="POST" action="{{ route('feedback.destroy', ['id' => $feedback->id]) }}" style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this feedback? Deleting this feedback will also remove any associated comments.')">Delete</button>
+                                            </form>
+                                            
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

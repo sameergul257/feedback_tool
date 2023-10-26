@@ -35,4 +35,9 @@ class Feedback extends Model
     {
         return $this->belongsToMany(User::class, 'feedback_votes', 'feedback_id', 'user_id');
     }
+
+    public function votes()
+    {
+        return $this->hasMany(FeedbackVote::class);
+    }
 }

@@ -104,4 +104,24 @@ class FeedbackController extends Controller
         $comments = $feedback->comments;
         return view('components.comment-list-template', compact('comments'))->render();
     }
+
+    public function destroy($id)
+    {
+        $feedback = Feedback::find($id);
+
+        if (!$feedback) {
+            return redirect()->back()->with('error', 'Feedback not found');
+        }
+
+
+        try {
+            $feedback->votes()->delete();
+            $feedback->comments()->delete();
+            $feedback->delete();
+            return redirect()->back()->with('status', 'Feedback deleted successfully');
+        } catch (\Throwable $th) {
+            //throw $th;
+            return redirect()->back()->with('error', 'Error deleting feedback ' . $th->getMessage());
+        }
+    }
 }

@@ -28,4 +28,7 @@ Route::prefix('/feedback')->name('feedback.')->middleware('auth')->controller(Fe
     Route::post('/vote', 'vote')->name('vote');
     Route::post('/addcomment', 'add_comment')->name('add_comment');
     Route::post('/getcommentslist', 'get_comments_list')->name('get_comments_list');
+    Route::middleware('checkuserrole:admin')->group(function () {
+        Route::delete('/delete/{id}', 'destroy')->name('destroy');
+    });
 });
