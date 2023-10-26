@@ -27,19 +27,19 @@
             <div class="card bg-white">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-3 col-6">
                             <label for=""><b>Title</b></label>
                             <div>{{ $feedback->title }}</div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-3 col-6">
                             <label for=""><b>Category</b></label>
                             <div>{{ $feedback->category->name }}</div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-3 col-6">
                             <label for=""><b>Submitted by</b></label>
                             <div>{{ $feedback->user->name }}</div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-3 col-6">
                             <form action="{{ route('feedback.vote') }}" method="post">
                                 @csrf
                                 <input type="hidden" name="id" value="{{ $feedback->id }}">

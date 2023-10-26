@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
+
 @section('content')
+
+<x-tinymce.config/>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
@@ -12,7 +16,7 @@
         <div class="col-md-12 mt-4">
             <div class="card bg-white">
                 <div class="card-body">
-                    <form action="{{ route('feedback.store') }}" method="post">
+                    <form id="feedback_form" action="{{ route('feedback.store') }}" method="post">
                         @csrf
                         <div class="row">
                             <div class="col-md-6">
@@ -34,9 +38,9 @@
                                     <div class="font-italic" style="color: red">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <label for="description">Description</label>
-                                <textarea class="form-control" name="description" id="description" cols="30" rows="10" required></textarea>
+                                <textarea class="form-control" id="myeditorinstance" rows="5" placeholder="Write description here ..."></textarea>
                                 @error('description')
                                     <div class="font-italic" style="color: red">{{ $message }}</div>
                                 @enderror
@@ -48,7 +52,21 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
+
+<script>
+    $(document).ready(function(){
+        $(document).on('submit', '#feedback_form', function(e){
+            // Create a hidden input field
+            var hiddenInput = document.createElement("textarea");
+            hiddenInput.type = "hidden";
+            hiddenInput.name = "description"; // Set the desired name for the input field
+            hiddenInput.value = tinyMCE.get('myeditorinstance').getContent();
+
+            // Append the hidden input to the form
+            $('#feedback_form').append(hiddenInput);
+        });
+    });
+</script>
 @endsection
