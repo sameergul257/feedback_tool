@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-4">
+        <div class="col-sm-6 col-md-8 col-lg-4">
             <h3 class="text-center">LOGIN</h3>
             <div class="card bg-white">
                 {{-- <div class="card-header">{{ __('Login') }}</div> --}}
@@ -13,7 +13,7 @@
                         @csrf
 
                         <div class="row mb-3">
-                            <div class="col-md-12">
+                            <div class="col-sm-12">
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Email">
 
                                 @error('email')

@@ -63,6 +63,7 @@
             hiddenInput.type = "hidden";
             hiddenInput.name = "description"; // Set the desired name for the input field
             hiddenInput.value = tinyMCE.get('myeditorinstance').getContent();
+            hiddenInput.style.display = 'none';
 
             // Append the hidden input to the form
             $('#feedback_form').append(hiddenInput);
