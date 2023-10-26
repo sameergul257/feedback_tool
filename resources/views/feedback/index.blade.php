@@ -43,7 +43,7 @@
                                     <td>{{ $index+1 }}</td>
                                     <td>{{ $feedback->title }}</td>
                                     <td>{{ $feedback->category->name }}</td>
-                                    <td>Vote Count HERE</td>
+                                    <td>{{ $feedback->voters->count() }}</td>
                                     <td>{{ $feedback->user->name }}</td>
                                     <td>{{ $feedback->created_at }}</td>
                                     <td>

@@ -30,4 +30,9 @@ class Feedback extends Model
     {
         return $this->hasMany(Comment::class)->orderBy('id', 'desc');
     }
+
+    public function voters()
+    {
+        return $this->belongsToMany(User::class, 'feedback_votes', 'feedback_id', 'user_id');
+    }
 }

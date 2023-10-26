@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+
+<x-tinymce.config/>
+
 <div class="container">
     @if (session('status'))
         <div class="alert alert-success" role="alert">
@@ -65,10 +68,10 @@
                     <b>Leave a Comment</b>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('feedback.add_comment') }}" method="post">
+                    <form id="comment_form" action="{{ route('feedback.add_comment') }}" method="post">
                         @csrf
                         <input type="hidden" name="feedback_id" value="{{ $feedback->id }}">
-                        <textarea class="form-control" name="content" id="content" rows="5" placeholder="Write your comment here ..." required></textarea>
+                        <textarea class="form-control" id="myeditorinstance" rows="5" placeholder="Write your comment here ..."></textarea>
                         @error('content')
                             <div class="font-italic" style="color: red">{{ $message }}</div>
                         @enderror
@@ -78,28 +81,37 @@
                 </div>
             </div>
             <br>
-            <div class="card-header">
-                <b>Comments</b>
-                <br>
-                <br>
 
-                @foreach ($comments as $comment)
-                    <div class="card bg-white">
-                        <div class="card-header">
-                            <b>{{ $comment->user->name }}</b>
-                        </div>
-                        <div class="card-body">
-                            {!! $comment->content !!}
-                        </div>
-                        <div class="card-footer text-muted">
-                            {{ $comment->created_at }}
-                        </div>
-                    </div>
-                    <br>
-                @endforeach
-            </div>
+            <x-comment-list :feedback_id="$feedback->id"/>
+            
         </div>
-
     </div>
 </div>
+
+
+<script>
+    $(document).ready(function(){
+        $(document).on('submit', '#comment_form', function(e){
+            e.preventDefault();
+
+            var data = $(this).serializeArray();
+            data.push({name: 'content', value: tinyMCE.get('myeditorinstance').getContent()});
+
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('feedback.add_comment') }}",
+                data: data,
+                success: function (response, textStatus, xhr) {
+                    get_comments_list();
+                    tinyMCE.get('myeditorinstance').setContent('')
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    var response = XMLHttpRequest;
+                    console.error(response);
+                }
+            }); 
+        })
+    });
+</script>
+
 @endsection

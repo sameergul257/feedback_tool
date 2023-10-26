@@ -27,4 +27,5 @@ Route::prefix('/feedback')->name('feedback.')->middleware('auth')->controller(Fe
     Route::get('/view/{id}', 'view')->name('view');
     Route::post('/vote', 'vote')->name('vote');
     Route::post('/addcomment', 'add_comment')->name('add_comment');
+    Route::post('/getcommentslist', 'get_comments_list')->name('get_comments_list');
 });

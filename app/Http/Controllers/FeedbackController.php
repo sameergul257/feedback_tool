@@ -13,6 +13,7 @@ class FeedbackController extends Controller
     public function index()
     {
         $feedbacks = Feedback::paginate(10);
+        // dd($feedbacks);
         return view('feedback.index', compact('feedbacks'));
     }
 
@@ -50,8 +51,7 @@ class FeedbackController extends Controller
     {
         $feedback = Feedback::findOrFail($id);
         $voted = FeedbackVote::where('feedback_id', $id)->value('id');
-        $comments = $feedback->comments;
-        return view('feedback.view', compact('feedback', 'voted', 'comments'));
+        return view('feedback.view', compact('feedback', 'voted'));
     }
 
     public function vote(Request $request)
@@ -96,5 +96,12 @@ class FeedbackController extends Controller
             //throw $th;
             return redirect()->back()->with('error', 'Error adding comment');
         }
+    }
+
+    public function get_comments_list(Request $request)
+    {
+        $feedback = Feedback::findOrFail($request->feedback_id);
+        $comments = $feedback->comments;
+        return view('components.comment-list-template', compact('comments'))->render();
     }
 }
