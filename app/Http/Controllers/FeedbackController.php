@@ -92,15 +92,20 @@ class FeedbackController extends Controller
         );
 
         try {
+            $commenting_check = Feedback::findOrFail($request->feedback_id);
+            if ($commenting_check->is_comment_enabled == '0') {
+                return response(['status' => false, 'message' => 'Comments disabled for this feedback by Admin']);
+            }
+
             Comment::create([
                 'content' => $request->input('content'),
                 'user_id' => auth()->user()->id,
                 'feedback_id' => $request->feedback_id,
             ]);
-            return redirect()->back()->with('status', 'Comment added successfully');
+            return response(['status' => true, 'message' => 'Comment added successfully']);
         } catch (\Throwable $th) {
             //throw $th;
-            return redirect()->back()->with('error', 'Error adding comment');
+            return response(['status' => false, 'message' => 'Error adding comment']);
         }
     }
 
@@ -126,6 +131,23 @@ class FeedbackController extends Controller
         } catch (\Throwable $th) {
             //throw $th;
             return redirect()->back()->with('error', 'Error deleting feedback ' . $th->getMessage());
+        }
+    }
+
+    public function changecommentingstatus(Request $request)
+    {
+        try {
+            $id = $request->id;
+            $is_comment_enabled = $request->is_comment_enabled;
+
+            $feedback = Feedback::findOrFail($id);
+            $feedback->is_comment_enabled = $is_comment_enabled;
+            $feedback->save();
+
+            return response(['status' => true, 'message' => 'Commenting status updated successfully']);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response(['status' => false, 'message' => 'Error changing commenting status']);
         }
     }
 }

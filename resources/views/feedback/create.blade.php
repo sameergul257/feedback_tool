@@ -34,7 +34,7 @@
                                 <select class="form-select" name="feedback_category_id" id="feedback_category_id" required>
                                     <option value="">Select</option>
                                     @foreach ($feedback_categories as $category)
-                                        <option value="{{ $category->id }}" {{ ($feedback->feedback_category_id == $category->id) ? 'selected' : '' }}>{{ $category->name }}</option>
+                                        <option value="{{ $category->id }}" {{ ($feedback->feedback_category_id ?? '' == $category->id) ? 'selected' : '' }}>{{ $category->name }}</option>
                                     @endforeach
                                 </select>
                                 @error('feedback_category_id')

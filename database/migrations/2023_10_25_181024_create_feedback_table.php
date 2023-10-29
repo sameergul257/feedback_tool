@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
+            $table->enum('is_comment_enabled', ['0', '1'])->default('1');
             $table->foreignId('feedback_category_id')->constrained('feedback_categories');
             $table->foreignId('submitted_by')->constrained('users');
             $table->timestamps();

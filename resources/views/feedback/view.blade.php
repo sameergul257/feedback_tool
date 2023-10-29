@@ -66,28 +66,34 @@
                     {!! $feedback->description !!}
                 </div>
             </div>
-            <br>
-            <div class="card bg-white">
-                <div class="card-header">
-                    <b>Leave a Comment</b>
-                </div>
-                <div class="card-body">
-                    <form id="comment_form" action="{{ route('feedback.add_comment') }}" method="post">
-                        @csrf
-                        <input type="hidden" name="feedback_id" value="{{ $feedback->id }}">
-                        <textarea class="form-control" id="myeditorinstance" rows="5" placeholder="Write your comment here ..."></textarea>
-                        @error('content')
-                            <div class="font-italic" style="color: red">{{ $message }}</div>
-                        @enderror
-                        <br>
-                        <div id="comment_action_status_div" class="alert alert-success" style="display: none"></div>
-                        <br>
-                        <button class="btn btn-primary">Add</button>
-                    </form>
-                </div>
-            </div>
-            <br>
 
+            <br>
+            @if ($feedback->is_comment_enabled)
+                <div class="card bg-white">
+                    <div class="card-header">
+                        <b>Leave a Comment</b>
+                    </div>
+                    <div class="card-body">
+                        <form id="comment_form" action="{{ route('feedback.add_comment') }}" method="post">
+                            @csrf
+                            <input type="hidden" name="feedback_id" value="{{ $feedback->id }}">
+                            <textarea class="form-control" id="myeditorinstance" rows="5" placeholder="Write your comment here ..."></textarea>
+                            @error('content')
+                                <div class="font-italic" style="color: red">{{ $message }}</div>
+                            @enderror
+                            <br>
+                            <div id="comment_action_status_div" class="alert alert-success" style="display: none"></div>
+                            <br>
+                            <button class="btn btn-primary">Add</button>
+                        </form>
+                    </div>
+                </div>
+            @else
+                <div class="alert alert-warning">Comments disabled for this feedback by Admin</div>
+            @endif
+
+
+            <br>
             <x-comment-list :feedback_id="$feedback->id"/>
             
         </div>
@@ -108,17 +114,26 @@
                 url: "{{ route('feedback.add_comment') }}",
                 data: data,
                 success: function (response, textStatus, xhr) {
-                    get_comments_list();
-                    $("#comment_action_status_div").html('Comment added successfully');
-                    $("#comment_action_status_div").addClass('alert-success').removeClass('alert-danger');
-                    $("#comment_action_status_div").show();
-                    setTimeout(function() {
-                        $("#comment_action_status_div").hide();
-                    }, 4000);
-                    tinyMCE.get('myeditorinstance').setContent('');
+                    $("#comment_action_status_div").html(response.message);
+                    if(response.status){
+                        get_comments_list();
+                        $("#comment_action_status_div").addClass('alert-success').removeClass('alert-danger');
+                        $("#comment_action_status_div").show();
+                        setTimeout(function() {
+                            $("#comment_action_status_div").hide();
+                        }, 4000);
+                        tinyMCE.get('myeditorinstance').setContent('');
+                    }
+                    else{
+                        $("#comment_action_status_div").removeClass('alert-success').addClass('alert-danger');
+                        $("#comment_action_status_div").show();
+                        setTimeout(function() {
+                            $("#comment_action_status_div").hide();
+                        }, 4000);
+                    }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    $("#comment_action_status_div").html('Error adding comment');
+                    $("#comment_action_status_div").html(response.message);
                     $("#comment_action_status_div").removeClass('alert-success').addClass('alert-danger');
                     $("#comment_action_status_div").show();
                     setTimeout(function() {

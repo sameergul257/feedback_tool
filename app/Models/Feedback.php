@@ -12,6 +12,7 @@ class Feedback extends Model
     protected $fillable = [
         'title',
         'description',
+        'is_comment_enabled',
         'feedback_category_id',
         'user_id',
     ];
