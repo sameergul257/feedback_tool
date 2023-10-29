@@ -7,6 +7,9 @@
 
 <div class="container">
     <div class="row justify-content-center">
+        @error('description')
+            <div class="alert alert-danger">{{ $message }}</div>
+        @enderror
         <div class="col-md-12">
             <div class="d-flex justify-content-between">
                 <h3>Create Feedback</h3>
@@ -24,7 +27,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="title">Title</label>
-                                <input type="text" class="form-control" name="title" id="title" value="{{ $feedback->title ?? '' }}" required>
+                                <input type="text" class="form-control" name="title" id="title" value="{{ old('title', $feedback->title ?? '') }}" required>
                                 @error('title')
                                     <div class="font-italic" style="color: red">{{ $message }}</div>
                                 @enderror
@@ -34,7 +37,7 @@
                                 <select class="form-select" name="feedback_category_id" id="feedback_category_id" required>
                                     <option value="">Select</option>
                                     @foreach ($feedback_categories as $category)
-                                        <option value="{{ $category->id }}" {{ ($feedback->feedback_category_id ?? '' == $category->id) ? 'selected' : '' }}>{{ $category->name }}</option>
+                                        <option value="{{ $category->id }}" {{ (old('feedback_category_id', $feedback->feedback_category_id ?? '') == $category->id) ? 'selected' : '' }}>{{ $category->name }}</option>
                                     @endforeach
                                 </select>
                                 @error('feedback_category_id')
@@ -44,9 +47,6 @@
                             <div class="col-md-12">
                                 <label for="description">Description</label>
                                 <textarea class="form-control" id="myeditorinstance" rows="5" placeholder="Write description here ...">{!! $feedback->description ?? '' !!}</textarea>
-                                @error('description')
-                                    <div class="font-italic" style="color: red">{{ $message }}</div>
-                                @enderror
                             </div>
                         </div>
                         <br>

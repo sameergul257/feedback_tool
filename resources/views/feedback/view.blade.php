@@ -133,7 +133,6 @@
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    $("#comment_action_status_div").html(response.message);
                     $("#comment_action_status_div").removeClass('alert-success').addClass('alert-danger');
                     $("#comment_action_status_div").show();
                     setTimeout(function() {

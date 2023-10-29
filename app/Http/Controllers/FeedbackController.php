@@ -7,6 +7,7 @@ use App\Models\Feedback;
 use App\Models\FeedbackCategory;
 use App\Models\FeedbackVote;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class FeedbackController extends Controller
 {
@@ -82,7 +83,8 @@ class FeedbackController extends Controller
 
     public function add_comment(Request $request)
     {
-        $request->validate(
+        $validator = Validator::make(
+            $request->all(),
             [
                 'content' => 'required',
             ],
@@ -90,6 +92,10 @@ class FeedbackController extends Controller
                 'content.required' => 'Comment field is required.',
             ]
         );
+
+        if ($validator->fails()) {
+            return response(['status' => false, 'message' => 'Comment field is required.']);
+        }
 
         try {
             $commenting_check = Feedback::findOrFail($request->feedback_id);
