@@ -7,6 +7,22 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## About Project
+- Admin Username and Password (admin@admin.com | password)
+- Any user registering with the register page is registered as a "User" role by default.
+- Users and Admin can create a feedback.
+- User who created the feedback can only edit it.
+- Users can vote for a feedback.
+- Feedback list is paginated.
+- Users can view and make multiple comments on feedbacks.
+- Only Admin can delete feedbacks.
+- Only Admin can manage users (list & delete).
+- User list is paginated.
+- Admin can Enalble/Disable Comments for a feedback.
+- System is responsive on all devices.
+- Rich text support for feedback description and comments.
+- Emoji support in feedback description and comments.
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
